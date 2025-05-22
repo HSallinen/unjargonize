@@ -9,14 +9,14 @@
     {
       "matches": ["*://*/*"],
       "js": [
-        "build/index.js",
-        "build/trust.js"
+        "build/index.js"
       ]
     }
   ],
 
   "permissions": [
-    "*://api.dictionaryapi.dev/api/*"
+    "*://api.dictionaryapi.dev/api/*",
+    "*://menta.fi/*",
   ]
 }
 

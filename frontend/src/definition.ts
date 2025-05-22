@@ -43,3 +43,17 @@ async function apiRunkku(word: string): Promise<Array<WordDefinition>> {
     return Promise.reject(error);
   }
 }
+
+async function backstageRunkku(words: Wordlist): Promise<Wordlist> {
+  const response = await fetch('http://menta.fi/', {
+    body: JSON.stringify(words) + '\n',
+  });
+
+  if (response.ok) {
+    const data: Wordlist = await response.json();
+    return data;
+  } else {
+    const error = new Error('tuuba');
+    return Promise.reject(error);
+  }
+}
