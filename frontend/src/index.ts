@@ -1,4 +1,4 @@
-type Wordlist = Array<string>;
+type Wordlist = { [key: string]: null };
 
 interface Definition {
   definition: string;
@@ -121,8 +121,10 @@ async function backstageRunkku(words: Wordlist): Promise<Wordlist> {
   });
 
   if (response.ok) {
-    const data: Wordlist = await response.json();
-    return data;
+    const data: Array<string> = await response.json();
+    const out: Wordlist = {};
+    data.forEach(word => (out[word] = null));
+    return out;
   } else {
     const error = new Error('tuuba');
     return Promise.reject(error);
