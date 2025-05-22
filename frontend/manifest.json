@@ -10,7 +10,8 @@
       "matches": ["*://*/*"],
       "js": [
         "build/index.js"
-      ]
+      ],
+      "css": ["unjargonize.css"]
     }
   ],
 
