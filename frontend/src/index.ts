@@ -1,26 +1,30 @@
-console.log("Try npm run lint/fix!");
+const apiURL = "menta.fi"
 
-const longString = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut aliquet diam.';
-
-const trailing = 'Semicolon'
-
-			const why={am:'I tabbed?'};
-
-const iWish = "I didn't have a trailing space..."; 
-
-const sicilian = true;;
-
-const vizzini = (!!sicilian) ? !!!sicilian : sicilian;
-
-const re = /foo   bar/;
-
-export function doSomeStuff(withThis: string, andThat: string, andThose: string[]) {
-    //function on one line
-    if(!Boolean(andThose.length)) {return false;}
-    console.log(withThis);
-    console.log(andThat);
-    console.dir(andThose);
-    console.log(longString, trailing, why, iWish, vizzini, re);
-    return;
+function isCommonWord (word: string) {
+  return false
 }
-// TODO: more examples
+
+async function getRareWords (words: Array<string>) {
+  const unCommonWords: {[key: string]: null} = {};
+
+    for (const word of words) {
+      if (isCommonWord(word)) {
+        continue;
+      }
+      unCommonWords[word.toLowerCase()] = null
+    }
+  
+  //const rareWords = await (await fetch()).json()
+  const rareWords = unCommonWords
+  return rareWords
+}
+
+async function main () {
+  const text = document.body.innerText;
+  const words = text.split(/[\W\d_]+/)
+  
+  const rareWords = await getRareWords(words);
+  console.log(rareWords)
+}
+
+main();
