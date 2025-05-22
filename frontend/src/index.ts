@@ -56,23 +56,21 @@ function addWord(
 
 function addEventListeners(words: Wordlist) {
   // Use event delegation by adding a single event listener to the document body
-  document.body.addEventListener("click", (event) => {
-
+  document.body.addEventListener('click', event => {
     const target = event.target as HTMLElement;
 
     // Remove any existing popup inside the span to avoid duplicates
-    const existingPopup = target.querySelector(".jargon-popup");
+    const existingPopup = target.querySelector('.jargon-popup');
     if (existingPopup) {
-      if (existingPopup.classList.contains("unjargonize-hide")) {
-        existingPopup.classList.remove("unjargonize-hide");
-      } 
-      else {
-        existingPopup.classList.add("unjargonize-hide");
+      if (existingPopup.classList.contains('unjargonize-hide')) {
+        existingPopup.classList.remove('unjargonize-hide');
+      } else {
+        existingPopup.classList.add('unjargonize-hide');
       }
-      return
+      return;
     }
     // Check if the clicked element is a span with the "unjargonize-jargon" class
-    if (target && target.classList.contains("unjargonize-jargon")) {
+    if (target && target.classList.contains('unjargonize-jargon')) {
       const word = target.textContent?.toLowerCase();
       if (word && word in words) {
         console.log(`Clicked on word: ${word}`);
@@ -109,13 +107,12 @@ function replace(words: Wordlist) {
 }
 
 async function main() {
-  document.body.appendChild(generatePopup('sex'));
   const text = document.body.innerText;
   const words = text.split(/[\W\d_]+/);
 
   const rareWords = await getRareWords(words);
   replace(rareWords);
-  addEventListeners(rareWords)
+  addEventListeners(rareWords);
 }
 
 main();
