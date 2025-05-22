@@ -26,7 +26,7 @@ function isCommonWord(word: string) {
 }
 
 async function getRareWords(words: Array<string>) {
-  const unCommonWords: { [key: string]: null } = {};
+  const unCommonWords: {[key: string]: null} = {};
 
   for (const word of words) {
     if (isCommonWord(word)) {
@@ -41,6 +41,7 @@ async function getRareWords(words: Array<string>) {
 }
 
 async function main() {
+  document.body.appendChild(generatePopup('sex'));
   const text = document.body.innerText;
   const words = text.split(/[\W\d_]+/);
 
@@ -87,4 +88,81 @@ async function backstageRunkku(words: Wordlist): Promise<Wordlist> {
     const error = new Error('tuuba');
     return Promise.reject(error);
   }
+}
+
+function generatePopup(word: string): HTMLDivElement {
+  const popup: HTMLIFrameElement = document.createElement('iframe');
+  popup.classList.add('jargon-popup');
+  popup.src = 'https://en.wiktionary.org/wiki/' + word;
+  return popup;
+  /*const definitions = await apiRunkku(word);
+  const popup: HTMLDivElement = document.createElement('div');
+  popup.classList.add('jargon-popup');
+
+  for (const key in definitions) {
+    const definition = definitions[key];
+    const wordDefinitionDiv: HTMLDivElement = document.createElement('div');
+    wordDefinitionDiv.classList.add('jargon-worddefinition');
+
+    //Add title
+    const title = document.createElement('h2');
+    title.classList.add('jargon-title');
+    title.innerText = definition.word;
+    wordDefinitionDiv.appendChild(title);
+
+    for (const key in definition.meanings) {
+      const meaning = definition.meanings[key];
+      const meaningDiv: HTMLDivElement = document.createElement('div');
+      meaningDiv.classList.add('jargon-meaning');
+
+      // Add part of speech
+      const partOfSpeech = document.createElement('h3');
+      partOfSpeech.classList.add('jargon-word-type');
+      partOfSpeech.innerText = meaning.partOfSpeech;
+      meaningDiv.appendChild(partOfSpeech);
+
+      // Definitions
+      const definitionTitle = document.createElement('h3');
+      definitionTitle.classList.add('jargon-definition-title');
+      definitionTitle.innerText = 'Definitions';
+      meaningDiv.appendChild(definitionTitle);
+      for (const key in meaning.definitions) {
+        const definition = meaning.definitions[key];
+        const definitionDiv: HTMLDivElement = document.createElement('div');
+        definitionDiv.classList.add('jargon-definition');
+
+        const definitionText = document.createElement('p');
+        definitionText.innerText = definition.definition;
+        definitionText.classList.add('jargon-definition-text');
+        definitionDiv.appendChild(definitionText);
+
+        // Add example if exists
+        if (definition.example !== undefined) {
+          const exampleText = document.createElement('p');
+          exampleText.classList.add('jargon-example-text');
+          exampleText.textContent = definition.example;
+          definitionDiv.appendChild(exampleText);
+        }
+
+        meaningDiv.appendChild(definitionDiv);
+      }
+
+      // Synonyms
+      const synonymTitle = document.createElement('h3');
+      definitionTitle.classList.add('jargon-definition-title');
+      definitionTitle.innerText = 'Definitions';
+      meaningDiv.appendChild(definitionTitle);
+      // Antonyms
+      const antonymTitle = document.createElement('h3');
+      definitionTitle.classList.add('jargon-definition-title');
+      definitionTitle.innerText = 'Definitions';
+      meaningDiv.appendChild(definitionTitle);
+
+      wordDefinitionDiv.appendChild(meaningDiv);
+    }
+
+    popup.appendChild(wordDefinitionDiv);
+  }
+
+  return popup;*/
 }

@@ -16,7 +16,7 @@
 
   "permissions": [
     "*://api.dictionaryapi.dev/api/*",
-    "*://menta.fi/*",
+    "*://menta.fi/*"
   ]
 }
 
