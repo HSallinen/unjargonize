@@ -8,12 +8,15 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["build/trust.js"]
+      "js": [
+        "build/index.js"
+      ]
     }
   ],
 
   "permissions": [
-    "*://api.dictionaryapi.dev/api/*"
+    "*://api.dictionaryapi.dev/api/*",
+    "*://menta.fi/*",
   ]
 }
 
