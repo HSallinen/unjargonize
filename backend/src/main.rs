@@ -19,7 +19,7 @@ fn main() {
 }
 
 fn handle_connection(mut stream: TcpStream) -> Option<()> {
-    let path = "/home/jjokinen/Documents/hackaton/uncommon.sqlite";
+    let path = /* file path*/;
     let mut buf_reader = BufReader::new(&stream);
     let mut line = String::new();
     let _result = stream.set_read_timeout(Some(Duration::from_secs(2)));
