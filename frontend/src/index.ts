@@ -25,10 +25,8 @@ function isCommonWord(word: string) {
   return false;
 }
 
-async function getRareWords(
-  words: Array<string>,
-): Promise<{ [key: string]: null }> {
-  const unCommonWords: { [key: string]: null } = {};
+async function getRareWords(words: Array<string>): Promise<Wordlist> {
+  const unCommonWords: Wordlist = {};
 
   for (const word of words) {
     if (isCommonWord(word)) {
@@ -44,18 +42,23 @@ async function getRareWords(
 
 function addWord(
   word: string,
-  words: { [key: string]: null },
+  words: Wordlist,
   htmlTag: boolean,
   newHtml: string,
 ): string {
   if (!htmlTag && word.toLowerCase() in words) {
-    newHtml += `<span class="unjargonize-jargon id="unjargonize-jargon-${word}>${word}</span>`;
+    newHtml += `<span class="unjargonize-jargon id="unjargonize-jargon-${word}">${word}</span>`;
   } else {
     newHtml += word;
   }
   return newHtml;
 }
-function replace(words: { [key: string]: null }) {
+
+function openPopup(id: string, word: string) {
+  document.getElementById(id)?.appendChild(generatePopup(word));
+}
+
+function replace(words: Wordlist) {
   const html: string = document.body.innerHTML;
   let htmlTag = false;
   let newHtml = '';
