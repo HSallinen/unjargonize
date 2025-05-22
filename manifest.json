@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "unjargonize",
+  "version": "1.0",
+
+  "description": "Adds defenitions for difficult words",
+  
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["build/index.js"]
+    }
+  ]
+}
+
