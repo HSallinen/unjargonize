@@ -10,13 +10,14 @@
       "matches": ["*://*/*"],
       "js": [
         "build/index.js"
-      ]
+      ],
+      "css": ["unjargonize.css"]
     }
   ],
 
   "permissions": [
     "*://api.dictionaryapi.dev/api/*",
-    "*://menta.fi/*",
+    "*://menta.fi/*"
   ]
 }
 
