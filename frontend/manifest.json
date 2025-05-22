@@ -4,11 +4,11 @@
   "version": "1.0",
 
   "description": "Adds defenitions for difficult words",
-  
+
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["build/index.js"]
+      "js": ["build/trust.js"]
     }
   ]
 }
