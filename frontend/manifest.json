@@ -10,6 +10,10 @@
       "matches": ["*://*/*"],
       "js": ["build/trust.js"]
     }
+  ],
+
+  "permissions": [
+    "*://api.dictionaryapi.dev/api/*"
   ]
 }
 
