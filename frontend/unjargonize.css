@@ -1,3 +1,6 @@
 .unjargonize-jargon {
   text-decoration: underline;
 }
+.unjargonize-hide {
+  display: none;
+}

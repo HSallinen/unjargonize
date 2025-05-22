@@ -47,17 +47,43 @@ function addWord(
   newHtml: string,
 ): string {
   if (!htmlTag && word.toLowerCase() in words) {
-    newHtml += `<span class="unjargonize-jargon id="unjargonize-jargon-${word}">${word}</span>`;
+    newHtml += `<span class="unjargonize-jargon unjargonize-jargon-${word}">${word}</span>`;
   } else {
     newHtml += word;
   }
   return newHtml;
 }
 
-function openPopup(id: string, word: string) {
-  document.getElementById(id)?.appendChild(generatePopup(word));
-}
+function addEventListeners(words: Wordlist) {
+  // Use event delegation by adding a single event listener to the document body
+  document.body.addEventListener("click", (event) => {
 
+    const target = event.target as HTMLElement;
+
+    // Remove any existing popup inside the span to avoid duplicates
+    const existingPopup = target.querySelector(".jargon-popup");
+    if (existingPopup) {
+      if (existingPopup.classList.contains("unjargonize-hide")) {
+        existingPopup.classList.remove("unjargonize-hide");
+      } 
+      else {
+        existingPopup.classList.add("unjargonize-hide");
+      }
+      return
+    }
+    // Check if the clicked element is a span with the "unjargonize-jargon" class
+    if (target && target.classList.contains("unjargonize-jargon")) {
+      const word = target.textContent?.toLowerCase();
+      if (word && word in words) {
+        console.log(`Clicked on word: ${word}`);
+        const popup = generatePopup(word);
+
+        // Append the new popup to the clicked span
+        target.appendChild(popup);
+      }
+    }
+  });
+}
 function replace(words: Wordlist) {
   const html: string = document.body.innerHTML;
   let htmlTag = false;
@@ -89,6 +115,7 @@ async function main() {
 
   const rareWords = await getRareWords(words);
   replace(rareWords);
+  addEventListeners(rareWords)
 }
 
 main();
