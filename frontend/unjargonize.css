@@ -4,12 +4,12 @@
 }
 
 .jargon-popup {
-  width: 500px;
-  height: 300px;
-  float: inline-end;
+  width: 40%;
+  height: 50%;
   z-index: 8;
-  position: relative;
-  top: 330px;
+  position: fixed;
+  top: 25%;
+  left : 30%;
   border: 1px solid black;
 }
 
