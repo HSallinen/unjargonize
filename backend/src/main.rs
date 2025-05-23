@@ -1,62 +1,39 @@
-use backend::ThreadPool;
-use rusqlite::Connection;
-use std::{
-    io::{BufReader, prelude::*},
-    net::{TcpListener, TcpStream},
-    time::Duration,
-};
+use actix_web::{App, HttpResponse, HttpServer, Responder, post, web};
+use rusqlite::{Connection, Result as SqlResult};
+use serde::{Deserialize, Serialize};
 
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-    for stream in listener.incoming() {
-        if let Ok(stream) = stream {
-            pool.execute(|| {
-                dbg!(handle_connection(stream));
-            });
+const DB_PATH: &str = "./uncommon.sqlite";
+
+#[derive(Deserialize)]
+struct QueryRequest(Vec<String>);
+
+#[derive(Serialize)]
+struct QueryResponse(Vec<String>);
+
+#[post("/")]
+async fn query_handler(body: web::Json<QueryRequest>) -> impl Responder {
+    let words = body.0.0;
+    match query_db(words) {
+        Ok(results) => HttpResponse::Ok().json(QueryResponse(results)),
+        Err(e) => {
+            eprintln!("DB Error: {:?}", e);
+            HttpResponse::InternalServerError().body("Database query failed")
         }
     }
 }
 
-fn handle_connection(mut stream: TcpStream) -> Option<()> {
-    let path = /* file path*/;
-    let mut buf_reader = BufReader::new(&stream);
-    let mut line = String::new();
-    let _result = stream.set_read_timeout(Some(Duration::from_secs(2)));
-    let _result = stream.set_write_timeout(Some(Duration::from_secs(2)));
-
-    loop {
-        println!("{line}");
-        line.clear();
-        buf_reader.read_line(&mut line).ok()?;
-        if line == "" {
-            break;
-        }
-        if line.trim().is_empty() {
-            break;
-        }
+fn query_db(words: Vec<String>) -> SqlResult<Vec<String>> {
+    let conn = Connection::open(DB_PATH)?;
+    let query = sql_call(words);
+    let mut stmt = conn.prepare(&query)?; 
+    let mut rows = stmt.query([])?;
+    
+    
+    let mut results = Vec::new();
+    while let Some(row) = rows.next()? {
+        results.push(row.get(0)?);
     }
-
-    line.clear();
-    buf_reader.read_line(&mut line).ok()?;
-    line = line.trim().to_owned();
-    println!("Request: {line:#?}");
-
-    let db = Connection::open(path).ok()?;
-    println!("{}", db.is_autocommit());
-
-    let vec: Vec<String> = serde_json::from_str(&line).ok()?;
-
-    let mut stmt = db.prepare(&sql_call(vec)).unwrap();
-    let mut words_iter = stmt.query([]).ok()?;
-    let mut vectwor: Vec<String> = Vec::new();
-    while let Ok(Some(row)) = words_iter.next() {
-        vectwor.push(row.get(0).ok()?)
-    }
-
-    let response = serde_json::to_string(&vectwor);
-    stream.write_all(response.ok()?.as_bytes()).ok()?;
-    Some(())
+    Ok(results)
 }
 
 fn sql_call(values: Vec<String>) -> String {
@@ -71,3 +48,10 @@ fn sql_call(values: Vec<String>) -> String {
     )
 }
 
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| App::new().service(query_handler))
+        .bind(("127.0.0.1", 7878))?
+        .run()
+        .await
+}

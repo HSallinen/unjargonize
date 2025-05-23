@@ -16,8 +16,10 @@
   ],
 
   "permissions": [
+    "webRequest",
     "*://api.dictionaryapi.dev/api/*",
-    "*://menta.fi/*"
+    "*://127.0.0.1:7878/*",
+    "<all_urls>"
   ]
 }
 
